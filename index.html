@@ -3,105 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Phiếu Dự Giờ - THCS Nguyễn Văn Bé</title>
+  <title>Phiếu Dự Giờ Số Hóa - THCS Nguyễn Văn Bé</title>
   <style>
     :root {
-      --primary: #1565c0;
-      --bg: #f4f6f9;
+      --primary: #1d4ed8;
+      --primary-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      --accent: #059669;
+      --bg: #f8fafc;
       --card: #ffffff;
-      --border: #cfd8dc;
-      --text: #263238;
-      --accent: #2e7d32;
+      --border: #cbd5e1;
+      --text: #1e293b;
     }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 90px; }
 
     /* GIAO DIỆN TRÊN ĐIỆN THOẠI */
     .top-header {
-      background: var(--primary); color: white; padding: 14px 16px;
+      background: var(--primary-gradient); color: white; padding: 16px;
       position: sticky; top: 0; z-index: 100; text-align: center; font-weight: bold;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-size: 1.05rem;
     }
     .container { max-width: 680px; margin: 0 auto; padding: 12px; }
     .card {
-      background: var(--card); border-radius: 10px; padding: 14px;
-      margin-bottom: 12px; border: 1px solid var(--border);
+      background: var(--card); border-radius: 12px; padding: 14px;
+      margin-bottom: 12px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .card-title { font-weight: bold; color: var(--primary); margin-bottom: 10px; font-size: 1rem; }
+    .card-title { font-weight: bold; color: var(--primary); margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .form-group { margin-bottom: 10px; }
-    label { display: block; font-size: 0.8rem; font-weight: 600; color: #546e7a; margin-bottom: 4px; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; }
     input, select, textarea {
-      width: 100%; padding: 9px; border: 1px solid var(--border); border-radius: 6px;
-      font-size: 0.95rem; background: #fff;
+      width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.95rem; background: #fff; color: var(--text);
     }
     textarea { min-height: 70px; resize: vertical; }
 
     /* MỤC HOẠT ĐỘNG THẦY TRÒ */
-    .activity-card { background: #fbfcfd; border: 1px dashed #90a4ae; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative; }
-    .btn-del-act { position: absolute; top: 8px; right: 8px; background: #ff5252; color: white; border: none; border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; }
+    .activity-card { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; margin-bottom: 12px; position: relative; }
+    .btn-del-act { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; border-radius: 6px; padding: 4px 8px; font-size: 0.75rem; font-weight: bold; }
     .btn-camera {
       display: inline-flex; align-items: center; justify-content: center;
-      background: #e3f2fd; color: var(--primary); border: 1px solid var(--primary);
-      padding: 7px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 100%; margin-top: 6px; cursor: pointer;
+      background: #eff6ff; color: #2563eb; border: 1.5px dashed #3b82f6;
+      padding: 9px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; width: 100%; margin-top: 8px; cursor: pointer;
     }
-    .photo-preview { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-    .thumb-wrap { position: relative; width: 65px; height: 65px; border-radius: 4px; overflow: hidden; border: 1px solid #ccc; }
+    .photo-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .thumb-wrap { position: relative; width: 70px; height: 70px; border-radius: 6px; overflow: hidden; border: 2px solid #e2e8f0; }
     .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
-    .thumb-del { position: absolute; top: 1px; right: 1px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; }
+    .thumb-del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; }
 
     .btn-add-act {
-      width: 100%; background: #eceff1; border: 1px dashed #78909c; color: #37474f;
-      padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;
+      width: 100%; background: #e0f2fe; border: 1.5px dashed #0284c7; color: #0369a1;
+      padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;
     }
 
     /* BẢNG ĐIỂM TIÊU CHÍ */
-    .criteria-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eceff1; gap: 8px; }
-    .criteria-name { font-size: 0.85rem; flex: 1; }
-    .criteria-score select { width: 85px; padding: 5px; font-weight: bold; color: var(--primary); }
+    .criteria-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; gap: 8px; }
+    .criteria-name { font-size: 0.85rem; flex: 1; color: #334155; }
+    .criteria-score select { width: 85px; padding: 6px; font-weight: bold; color: var(--primary); border-color: #93c5fd; }
 
     .score-summary {
-      background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px;
-      padding: 12px; margin-top: 10px; text-align: center;
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 1.5px solid #6ee7b7; border-radius: 10px;
+      padding: 14px; margin-top: 12px; text-align: center;
     }
-    .total-point { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
-    .rating-badge { font-size: 1.1rem; font-weight: bold; color: #1b5e20; }
+    .total-point { font-size: 1.5rem; font-weight: 800; color: #047857; }
+    .rating-badge { font-size: 1.2rem; font-weight: 800; color: #065f46; }
 
     /* NÚT XUẤT PDF */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0; background: white;
-      padding: 10px 16px; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); text-align: center;
+      padding: 12px 16px; box-shadow: 0 -4px 10px rgba(0,0,0,0.06); text-align: center;
     }
     .btn-submit {
-      background: var(--primary); color: white; border: none; padding: 13px 20px;
-      border-radius: 8px; font-size: 1rem; font-weight: bold; width: 100%; max-width: 680px;
+      background: var(--primary-gradient); color: white; border: none; padding: 14px 20px;
+      border-radius: 10px; font-size: 1rem; font-weight: bold; width: 100%; max-width: 680px;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
     }
 
-    /* BẢN DÀN TRANG KHI IN RA PDF (A4 THEO MẪU CÔNG VĂN 5512) */
+    /* =======================================================
+       BẢN DÀN TRANG XUẤT PDF RỰC RỠ & HIỆN ĐẠI (A4)
+       ======================================================= */
     #print-layout { display: none; }
 
     @media print {
+      /* Giữ nguyên màu nền và viền màu khi xuất PDF trên Safari iOS */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
       body { background: white; padding: 0; }
       .top-header, .container, .bottom-bar { display: none !important; }
-      #print-layout { display: block !important; font-family: "Times New Roman", serif; color: black; font-size: 10.5pt; }
+      #print-layout { 
+        display: block !important; 
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+        color: #1e293b; 
+        font-size: 10pt; 
+      }
       
-      @page { size: A4 portrait; margin: 15mm 12mm 15mm 15mm; }
+      @page { size: A4 portrait; margin: 12mm 12mm 12mm 12mm; }
 
-      .p-header-table { width: 100%; border: none; margin-bottom: 10px; }
+      .p-header-table { width: 100%; border: none; margin-bottom: 8px; }
       .p-header-table td { border: none; padding: 2px; text-align: center; vertical-align: top; }
-      .p-title { font-size: 13pt; font-weight: bold; text-transform: uppercase; margin: 10px 0 6px 0; text-align: center; }
+      
+      .p-school-title { font-weight: 800; color: #1e3a8a; font-size: 10.5pt; }
+      .p-national-title { font-weight: 800; color: #0f172a; font-size: 10.5pt; }
 
+      .p-main-title {
+        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        color: white; padding: 10px; border-radius: 8px; text-align: center;
+        margin: 10px 0 12px 0;
+      }
+      .p-main-title h1 { margin: 0; font-size: 13pt; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
+      .p-main-title div { font-size: 9.5pt; opacity: 0.9; margin-top: 2px; }
+
+      .p-info-card {
+        background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px;
+        padding: 8px 12px; margin-bottom: 12px; line-height: 1.5; font-size: 9.5pt;
+      }
+      .p-info-card b { color: #1e3a8a; }
+
+      /* Ribbon tiêu đề các phần */
+      .p-ribbon {
+        background: #0284c7; color: white; font-weight: bold; font-size: 10pt;
+        padding: 5px 10px; border-radius: 5px; margin: 12px 0 6px 0;
+        text-transform: uppercase; letter-spacing: 0.3px; display: inline-block;
+      }
+
+      /* Bảng nội dung & hoạt động */
       .p-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-      .p-table td, .p-table th { border: 1px solid black; padding: 4px 6px; font-size: 9.5pt; vertical-align: top; }
-      .p-table th { background: #f2f2f2; text-align: center; }
+      .p-table td, .p-table th { border: 1px solid #cbd5e1; padding: 5px 7px; font-size: 9pt; vertical-align: top; }
+      .p-table th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; text-align: center; }
 
-      .p-section-title { font-weight: bold; font-size: 10.5pt; margin: 8px 0 4px 0; text-transform: uppercase; }
-      .p-photo-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-      .p-photo-grid img { max-width: 140px; max-height: 100px; object-fit: contain; border: 1px solid #888; }
+      /* Bảng tiêu chí màu mè */
+      .p-table-score th { background-color: #1e40af; color: white; border-color: #1e3a8a; }
+      .p-table-score tr:nth-child(even) { background-color: #f8fafc; }
+      .p-nhom-title { background-color: #eff6ff !important; color: #1d4ed8; font-weight: bold; text-align: center; vertical-align: middle; }
+
+      /* Huy hiệu kết quả */
+      .p-summary-box {
+        background: #ecfdf5; border: 2px solid #10b981; border-radius: 8px;
+        padding: 8px 14px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center;
+      }
+      .p-summary-box span { font-weight: 800; font-size: 11pt; color: #047857; }
+
+      .p-photo-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
+      .p-photo-grid img { max-width: 130px; max-height: 95px; object-fit: contain; border-radius: 6px; border: 1.5px solid #94a3b8; }
 
       .avoid-break { page-break-inside: avoid; }
       .p-sign-table { width: 100%; border: none; margin-top: 15px; page-break-inside: avoid; }
-      .p-sign-table td { border: none; text-align: center; width: 50%; vertical-align: top; font-size: 10pt; }
+      .p-sign-table td { border: none; text-align: center; width: 50%; vertical-align: top; font-size: 9.5pt; }
+
+      .p-footer-note {
+        font-size: 8pt; color: #64748b; font-style: italic; margin-top: 15px;
+        border-top: 1px solid #e2e8f0; padding-top: 4px;
+      }
     }
   </style>
 </head>
@@ -173,19 +228,19 @@
     <div class="card">
       <div class="card-title">⚖️ II. Điểm Đánh Giá (12 Tiêu Chí)</div>
       
-      <div style="font-size: 0.85rem; font-weight: bold; color: #d32f2f; margin-bottom: 6px;">1. Kế hoạch bài dạy (6.00đ)</div>
+      <div style="font-size: 0.85rem; font-weight: bold; color: #0284c7; margin-bottom: 6px;">1. Kế hoạch bài dạy (6.00đ)</div>
       <div class="criteria-item"><div class="criteria-name">1. Sự phù hợp mục tiêu, nội dung (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">2. Độ rõ ràng mục tiêu, SP học sinh (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">3. Thiết bị dạy học và học liệu (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">4. Phương án kiểm tra, đánh giá (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
 
-      <div style="font-size: 0.85rem; font-weight: bold; color: #d32f2f; margin: 10px 0 6px 0;">2. Hoạt động của giáo viên (7.00đ)</div>
+      <div style="font-size: 0.85rem; font-weight: bold; color: #0284c7; margin: 10px 0 6px 0;">2. Hoạt động của giáo viên (7.00đ)</div>
       <div class="criteria-item"><div class="criteria-name">5. Chuyển giao nhiệm vụ học tập (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">6. Theo dõi, quan sát phát hiện khó khăn (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">7. Biện pháp hỗ trợ, khuyến khích HS (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">8. Đánh giá, tổng hợp kiến thức kết quả (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
 
-      <div style="font-size: 0.85rem; font-weight: bold; color: #d32f2f; margin: 10px 0 6px 0;">3. Hoạt động của học sinh (7.00đ)</div>
+      <div style="font-size: 0.85rem; font-weight: bold; color: #0284c7; margin: 10px 0 6px 0;">3. Hoạt động của học sinh (7.00đ)</div>
       <div class="criteria-item"><div class="criteria-name">9. Khả năng tiếp nhận, sẵn sàng học (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">10. Mức độ tích cực, hợp tác của HS (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
       <div class="criteria-item"><div class="criteria-name">11. Thảo luận, trình bày kết quả (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
@@ -215,100 +270,107 @@
     <button class="btn-submit" onclick="xuatBanInPDF()">📄 Xuất File PDF</button>
   </div>
 
-  <!-- ==================== KHUNG IN CHUẨN A4 CÔNG VĂN 5512 ==================== -->
+  <!-- ==================== KHUNG DÀN TRANG PDF DIGITAL COLOR ==================== -->
   <div id="print-layout">
     <table class="p-header-table">
       <tr>
-        <td style="width: 45%;">
-          UBND PHƯỜNG BÌNH LỢI TRUNG<br>
-          <b>TRƯỜNG THCS NGUYỄN VĂN BÉ</b>
+        <td style="width: 46%;">
+          <span style="font-size: 8.5pt; color: #475569;">UBND PHƯỜNG BÌNH LỢI TRUNG</span><br>
+          <span class="p-school-title">TRƯỜNG THCS NGUYỄN VĂN BÉ</span>
         </td>
-        <td style="width: 55%;">
-          <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
-          <u>Độc lập – Tự do – Hạnh phúc</u>
+        <td style="width: 54%;">
+          <span class="p-national-title">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</span><br>
+          <span style="font-size: 8.5pt; text-decoration: underline; color: #334155;">Độc lập – Tự do – Hạnh phúc</span>
         </td>
       </tr>
     </table>
 
-    <div class="p-title">PHIẾU GHI NHẬN, ĐÁNH GIÁ BÀI DẠY, CHỦ ĐỀ DẠY HỌC<br><span style="font-size: 11pt;">BẬC TRUNG HỌC</span></div>
-
-    <div style="margin-bottom: 8px; line-height: 1.4;">
-      Họ và tên giáo viên dạy: <b id="pr-gv"></b><br>
-      Trường THCS Nguyễn Văn Bé &nbsp;&nbsp;-&nbsp;&nbsp; Lớp: <b id="pr-lop"></b><br>
-      Môn: <b id="pr-mon"></b> &nbsp;&nbsp;-&nbsp;&nbsp; Tên bài (chủ đề): <b id="pr-bai"></b><br>
-      Thời gian: <span id="pr-thoigian"></span><br>
-      Họ và tên người dự: <b id="pr-nguoidu"></b> &nbsp;&nbsp;-&nbsp;&nbsp; Chuyên môn: <span id="pr-chuyenmon"></span><br>
-      Đơn vị công tác: Trường THCS Nguyễn Văn Bé
+    <div class="p-main-title">
+      <h1>PHIẾU GHI NHẬN, ĐÁNH GIÁ BÀI DẠY</h1>
+      <div>BẬC TRUNG HỌC - CÔNG VĂN 5512</div>
     </div>
 
-    <div class="p-section-title">I. PHẦN GHI NHẬN</div>
+    <div class="p-info-card">
+      <div style="display: flex; justify-content: space-between;">
+        <div><b>Giáo viên dạy:</b> <span id="pr-gv"></span></div>
+        <div><b>Lớp:</b> <span id="pr-lop"></span></div>
+      </div>
+      <div style="display: flex; justify-content: space-between; margin-top: 3px;">
+        <div><b>Môn học:</b> <span id="pr-mon"></span></div>
+        <div><b>Thời gian:</b> <span id="pr-thoigian"></span></div>
+      </div>
+      <div style="margin-top: 3px;"><b>Tên bài (chủ đề):</b> <span id="pr-bai"></span></div>
+      <div style="display: flex; justify-content: space-between; margin-top: 3px;">
+        <div><b>Người dự:</b> <span id="pr-nguoidu"></span></div>
+        <div><b>Chuyên môn:</b> <span id="pr-chuyenmon"></span></div>
+      </div>
+    </div>
+
+    <div class="p-ribbon">I. PHẦN GHI NHẬN DIỄN BIẾN TIẾT DẠY</div>
     <table class="p-table" id="pr-table-ghinhan">
       <thead>
         <tr>
-          <th style="width: 30%;">Hoạt động Thầy và Trò</th>
-          <th style="width: 35%;">Nội dung</th>
-          <th style="width: 35%;">Nhận xét</th>
+          <th style="width: 32%;">Hoạt động Thầy và Trò</th>
+          <th style="width: 34%;">Nội dung</th>
+          <th style="width: 34%;">Nhận xét</th>
         </tr>
       </thead>
       <tbody id="pr-tbody-ghinhan"></tbody>
     </table>
 
     <div class="avoid-break">
-      <div class="p-section-title">II. PHẦN CHO ĐIỂM</div>
-      <table class="p-table">
+      <div class="p-ribbon" style="background: #1e40af;">II. PHẦN ĐÁNH GIÁ THEO TIÊU CHÍ CV 5512</div>
+      <table class="p-table p-table-score">
         <thead>
           <tr>
             <th>Nội dung</th>
             <th>TC</th>
-            <th>Tiêu chí</th>
+            <th>Tiêu chí đánh giá</th>
             <th>Tối đa</th>
-            <th>Đánh giá</th>
+            <th>Điểm</th>
           </tr>
         </thead>
         <tbody id="pr-tbody-diem"></tbody>
       </table>
 
-      <div style="font-weight: bold; margin: 4px 0 8px 0;">
-        Xếp loại bài dạy: <span id="pr-xeploai" style="text-transform: uppercase;"></span> 
-        (Tổng điểm: <span id="pr-tongdiem"></span>/20,00)
+      <div class="p-summary-box">
+        <div>KẾT QUẢ ĐÁNH GIÁ: <span id="pr-xeploai" style="text-transform: uppercase;"></span></div>
+        <div>TỔNG ĐIỂM: <span id="pr-tongdiem"></span> / 20,00</div>
       </div>
     </div>
 
     <div class="avoid-break">
-      <div class="p-section-title">III. NHẬN XÉT, ĐÁNH GIÁ</div>
-      <div style="font-weight: bold; margin-top: 4px;">1. Người dự giờ nhận xét:</div>
-      <div style="margin-left: 10px;">
-        a) Những thành công của giờ dạy:<br>
-        <div id="pr-nx-tot" style="white-space: pre-wrap; margin-bottom: 6px; font-style: italic;"></div>
-        b) Những hạn chế của tiết học cần lưu ý:<br>
-        <div id="pr-nx-hanche" style="white-space: pre-wrap; font-style: italic;"></div>
+      <div class="p-ribbon" style="background: #0f766e;">III. NHẬN XÉT & GÓP Ý CỦA NGƯỜI DỰ</div>
+      <div style="margin: 6px 0 4px 6px; font-size: 9.5pt;">
+        <b style="color: #047857;">1. Những thành công của giờ dạy:</b>
+        <div id="pr-nx-tot" style="white-space: pre-wrap; margin: 4px 0 8px 10px; font-style: italic; color: #1e293b;"></div>
+        <b style="color: #b91c1c;">2. Những hạn chế của tiết học cần lưu ý:</b>
+        <div id="pr-nx-hanche" style="white-space: pre-wrap; margin: 4px 0 8px 10px; font-style: italic; color: #1e293b;"></div>
       </div>
 
       <table class="p-sign-table">
         <tr>
           <td>
             <b>Người được đánh giá</b><br>
-            <i>(Ký và ghi rõ họ tên)</i>
+            <i style="font-size: 8.5pt; color: #64748b;">(Ký và ghi rõ họ tên)</i>
           </td>
           <td>
             <i>Bình Thạnh, ngày .... tháng .... năm 202...</i><br>
             <b>Người đánh giá</b><br>
-            <i>(Ký và ghi rõ họ tên)</i>
-            <div style="margin-top: 45px; font-weight: bold;" id="pr-sign-name"></div>
+            <i style="font-size: 8.5pt; color: #64748b;">(Ký và ghi rõ họ tên)</i>
+            <div style="margin-top: 45px; font-weight: bold; color: #1e3a8a;" id="pr-sign-name"></div>
           </td>
         </tr>
       </table>
-      <div style="font-size: 8pt; font-style: italic; margin-top: 15px; border-top: 1px solid #ccc; padding-top: 3px;">
+      <div class="p-footer-note">
         CV 5512 /BGDĐT-GDTrH hướng dẫn xây dựng và tổ chức thực hiện KHGD của trường theo TT 32
       </div>
     </div>
   </div>
 
   <script>
-    // Khởi tạo ngày mặc định
     document.getElementById('ngay-day').valueAsDate = new Date();
 
-    // 1. Quản lý hoạt động động (Add / Remove)
     let hoatDongCount = 0;
     function themHoatDong(ten = "", nd = "", nx = "") {
       hoatDongCount++;
@@ -338,12 +400,12 @@
       document.getElementById('activity-list').insertAdjacentHTML('beforeend', tpl);
     }
 
-    // Thêm sẵn 3 khung mẫu lúc mới mở
+    // Khởi tạo sẵn 3 hoạt động
     themHoatDong("Hoạt động 1: Khởi động");
     themHoatDong("Hoạt động 2: Hình thành kiến thức mới");
     themHoatDong("Hoạt động 3: Luyện tập - Vận dụng");
 
-    // 2. Nén ảnh tự động trên RAM iPhone
+    // Xử lý nén ảnh nhanh trên RAM điện thoại
     function xuLyAnh(event, boxId) {
       const file = event.target.files[0];
       if (!file) return;
@@ -371,7 +433,7 @@
       event.target.value = "";
     }
 
-    // 3. Tính điểm tự động theo CV 5512
+    // Tính điểm tự động chuẩn CV 5512
     function tinhTongDiem() {
       const selects = document.querySelectorAll('.score-input');
       let tong = 0;
@@ -387,7 +449,6 @@
       return { tong: tong.toFixed(2), xepLoai };
     }
 
-    // Tiêu chuẩn 12 tiêu chí văn bản gốc CV 5512
     const danhSachTieuChi = [
       { nhom: "Kế hoạch bài dạy", tc: 1, text: "Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung...", max: "1,00" },
       { nhom: "Kế hoạch bài dạy", tc: 2, text: "Mức độ rõ ràng, chính xác của mục tiêu, nội dung, sản phẩm...", max: "2,00" },
@@ -403,9 +464,8 @@
       { nhom: "Hoạt động của học sinh", tc: 12, text: "Mức độ đúng đắn, chính xác của kết quả học tập...", max: "1,00" }
     ];
 
-    // 4. Đổ dữ liệu và gọi in PDF trên Safari
+    // Chuyển dữ liệu và kích hoạt lệnh in PDF
     function xuatBanInPDF() {
-      // Thông tin đầu
       document.getElementById('pr-gv').innerText = document.getElementById('gv-day').value || "....................................";
       document.getElementById('pr-lop').innerText = document.getElementById('lop').value || "..........";
       document.getElementById('pr-mon').innerText = document.getElementById('mon').value || "...................";
@@ -438,7 +498,7 @@
 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><b>${name}</b>${imgHtml}</td>
+          <td><b style="color:#1e3a8a;">${name}</b>${imgHtml}</td>
           <td style="white-space: pre-wrap;">${cont}</td>
           <td style="white-space: pre-wrap;">${comm}</td>
         `;
@@ -453,17 +513,17 @@
       danhSachTieuChi.forEach((item, idx) => {
         const row = document.createElement('tr');
         let nhomCell = "";
-        if (idx === 0) nhomCell = `<td rowspan="4" style="text-align:center; font-weight:bold; vertical-align:middle;">Kế hoạch bài dạy</td>`;
-        if (idx === 4) nhomCell = `<td rowspan="4" style="text-align:center; font-weight:bold; vertical-align:middle;">Hoạt động của giáo viên</td>`;
-        if (idx === 8) nhomCell = `<td rowspan="4" style="text-align:center; font-weight:bold; vertical-align:middle;">Hoạt động của học sinh</td>`;
+        if (idx === 0) nhomCell = `<td rowspan="4" class="p-nhom-title">Kế hoạch bài dạy</td>`;
+        if (idx === 4) nhomCell = `<td rowspan="4" class="p-nhom-title">Hoạt động của giáo viên</td>`;
+        if (idx === 8) nhomCell = `<td rowspan="4" class="p-nhom-title">Hoạt động của học sinh</td>`;
 
         const val = parseFloat(selectVals[idx].value).toFixed(2).replace('.', ',');
         row.innerHTML = `
           ${nhomCell}
-          <td style="text-align:center;">${item.tc}</td>
+          <td style="text-align:center; font-weight:600;">${item.tc}</td>
           <td>${item.text}</td>
           <td style="text-align:center;">${item.max}</td>
-          <td style="text-align:center; font-weight:bold;">${val}</td>
+          <td style="text-align:center; font-weight:800; color:#1e40af;">${val}</td>
         `;
         tbodyII.appendChild(row);
       });
@@ -476,7 +536,7 @@
       document.getElementById('pr-nx-tot').innerText = document.getElementById('nhanxet-tot').value || "(Không có ghi nhận)";
       document.getElementById('pr-nx-hanche').innerText = document.getElementById('nhanxet-hanche').value || "(Không có ghi nhận)";
 
-      // Gọi lệnh in trên iPhone
+      // Kích hoạt Safari in/xuất PDF
       window.print();
     }
   </script>
