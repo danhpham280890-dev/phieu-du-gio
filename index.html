@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Phiếu Dự Giờ - THCS Nguyễn Văn Bé</title>
+  <style>
+    :root {
+      --primary: #1565c0;
+      --bg: #f4f6f9;
+      --card: #ffffff;
+      --border: #cfd8dc;
+      --text: #263238;
+      --accent: #2e7d32;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); padding-bottom: 90px; }
+
+    /* GIAO DIỆN TRÊN ĐIỆN THOẠI */
+    .top-header {
+      background: var(--primary); color: white; padding: 14px 16px;
+      position: sticky; top: 0; z-index: 100; text-align: center; font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .container { max-width: 680px; margin: 0 auto; padding: 12px; }
+    .card {
+      background: var(--card); border-radius: 10px; padding: 14px;
+      margin-bottom: 12px; border: 1px solid var(--border);
+    }
+    .card-title { font-weight: bold; color: var(--primary); margin-bottom: 10px; font-size: 1rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .form-group { margin-bottom: 10px; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: #546e7a; margin-bottom: 4px; }
+    input, select, textarea {
+      width: 100%; padding: 9px; border: 1px solid var(--border); border-radius: 6px;
+      font-size: 0.95rem; background: #fff;
+    }
+    textarea { min-height: 70px; resize: vertical; }
+
+    /* MỤC HOẠT ĐỘNG THẦY TRÒ */
+    .activity-card { background: #fbfcfd; border: 1px dashed #90a4ae; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative; }
+    .btn-del-act { position: absolute; top: 8px; right: 8px; background: #ff5252; color: white; border: none; border-radius: 4px; padding: 2px 6px; font-size: 0.75rem; }
+    .btn-camera {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #e3f2fd; color: var(--primary); border: 1px solid var(--primary);
+      padding: 7px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; width: 100%; margin-top: 6px; cursor: pointer;
+    }
+    .photo-preview { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .thumb-wrap { position: relative; width: 65px; height: 65px; border-radius: 4px; overflow: hidden; border: 1px solid #ccc; }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb-del { position: absolute; top: 1px; right: 1px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; }
+
+    .btn-add-act {
+      width: 100%; background: #eceff1; border: 1px dashed #78909c; color: #37474f;
+      padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;
+    }
+
+    /* BẢNG ĐIỂM TIÊU CHÍ */
+    .criteria-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eceff1; gap: 8px; }
+    .criteria-name { font-size: 0.85rem; flex: 1; }
+    .criteria-score select { width: 85px; padding: 5px; font-weight: bold; color: var(--primary); }
+
+    .score-summary {
+      background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 8px;
+      padding: 12px; margin-top: 10px; text-align: center;
+    }
+    .total-point { font-size: 1.4rem; font-weight: bold; color: var(--accent); }
+    .rating-badge { font-size: 1.1rem; font-weight: bold; color: #1b5e20; }
+
+    /* NÚT XUẤT PDF */
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; background: white;
+      padding: 10px 16px; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); text-align: center;
+    }
+    .btn-submit {
+      background: var(--primary); color: white; border: none; padding: 13px 20px;
+      border-radius: 8px; font-size: 1rem; font-weight: bold; width: 100%; max-width: 680px;
+    }
+
+    /* BẢN DÀN TRANG KHI IN RA PDF (A4 THEO MẪU CÔNG VĂN 5512) */
+    #print-layout { display: none; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .top-header, .container, .bottom-bar { display: none !important; }
+      #print-layout { display: block !important; font-family: "Times New Roman", serif; color: black; font-size: 10.5pt; }
+      
+      @page { size: A4 portrait; margin: 15mm 12mm 15mm 15mm; }
+
+      .p-header-table { width: 100%; border: none; margin-bottom: 10px; }
+      .p-header-table td { border: none; padding: 2px; text-align: center; vertical-align: top; }
+      .p-title { font-size: 13pt; font-weight: bold; text-transform: uppercase; margin: 10px 0 6px 0; text-align: center; }
+
+      .p-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+      .p-table td, .p-table th { border: 1px solid black; padding: 4px 6px; font-size: 9.5pt; vertical-align: top; }
+      .p-table th { background: #f2f2f2; text-align: center; }
+
+      .p-section-title { font-weight: bold; font-size: 10.5pt; margin: 8px 0 4px 0; text-transform: uppercase; }
+      .p-photo-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+      .p-photo-grid img { max-width: 140px; max-height: 100px; object-fit: contain; border: 1px solid #888; }
+
+      .avoid-break { page-break-inside: avoid; }
+      .p-sign-table { width: 100%; border: none; margin-top: 15px; page-break-inside: avoid; }
+      .p-sign-table td { border: none; text-align: center; width: 50%; vertical-align: top; font-size: 10pt; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-header">📝 Nhập Biên Bản Dự Giờ</div>
+
+  <div class="container">
+    <!-- 1. THÔNG TIN HÀNH CHÍNH -->
+    <div class="card">
+      <div class="card-title">📌 Thông Tin Tiết Dạy</div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Giáo viên dạy</label>
+          <input type="text" id="gv-day" placeholder="Họ và tên GV...">
+        </div>
+        <div class="form-group">
+          <label>Lớp</label>
+          <input type="text" id="lop" placeholder="VD: 8A1">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Môn học</label>
+          <input type="text" id="mon" placeholder="VD: Khoa học tự nhiên">
+        </div>
+        <div class="form-group">
+          <label>Tiết / Buổi</label>
+          <input type="text" id="tiet" placeholder="VD: Tiết 2 (Sáng)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tên bài (chủ đề)</label>
+        <input type="text" id="ten-bai" placeholder="Nhập tên bài dạy...">
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Ngày dự</label>
+          <input type="date" id="ngay-day">
+        </div>
+        <div class="form-group">
+          <label>Thứ</label>
+          <select id="thu-day">
+            <option>Thứ Hai</option><option>Thứ Ba</option><option>Thứ Tư</option>
+            <option>Thứ Năm</option><option>Thứ Sáu</option><option>Thứ Bảy</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Người dự giờ</label>
+          <input type="text" id="nguoi-du" placeholder="Họ và tên bạn...">
+        </div>
+        <div class="form-group">
+          <label>Chuyên môn</label>
+          <input type="text" id="chuyen-mon" placeholder="VD: Hóa học">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. PHẦN I: GHI NHẬN TIẾT DẠY -->
+    <div class="card">
+      <div class="card-title">📖 I. Phần Ghi Nhận Hoạt Động</div>
+      <div id="activity-list"></div>
+      <button class="btn-add-act" onclick="themHoatDong()">➕ Thêm Hoạt Động Mới</button>
+    </div>
+
+    <!-- 3. PHẦN II: CHO ĐIỂM 12 TIÊU CHÍ (CV 5512) -->
+    <div class="card">
+      <div class="card-title">⚖️ II. Điểm Đánh Giá (12 Tiêu Chí)</div>
+      
+      <div style="font-size: 0.85rem; font-weight: bold; color: #d32f2f; margin-bottom: 6px;">1. Kế hoạch bài dạy (6.00đ)</div>
+      <div class="criteria-item"><div class="criteria-name">1. Sự phù hợp mục tiêu, nội dung (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">2. Độ rõ ràng mục tiêu, SP học sinh (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">3. Thiết bị dạy học và học liệu (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">4. Phương án kiểm tra, đánh giá (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+
+      <div style="font-size: 0.85rem; font-weight: bold; color: #d32f2f; margin: 10px 0 6px 0;">2. Hoạt động của giáo viên (7.00đ)</div>
+      <div class="criteria-item"><div class="criteria-name">5. Chuyển giao nhiệm vụ học tập (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">6. Theo dõi, quan sát phát hiện khó khăn (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">7. Biện pháp hỗ trợ, khuyến khích HS (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">8. Đánh giá, tổng hợp kiến thức kết quả (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+
+      <div style="font-size: 0.85rem; font-weight: bold; color: #d32f2f; margin: 10px 0 6px 0;">3. Hoạt động của học sinh (7.00đ)</div>
+      <div class="criteria-item"><div class="criteria-name">9. Khả năng tiếp nhận, sẵn sàng học (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">10. Mức độ tích cực, hợp tác của HS (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">11. Thảo luận, trình bày kết quả (tối đa 2.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="2.0">2.00</option><option value="1.75">1.75</option><option value="1.5">1.50</option><option value="1.25">1.25</option><option value="1.0">1.00</option></select></div></div>
+      <div class="criteria-item"><div class="criteria-name">12. Độ đúng đắn của sản phẩm HS (tối đa 1.0)</div><div class="criteria-score"><select class="score-input" onchange="tinhTongDiem()"><option value="1.0">1.00</option><option value="0.75">0.75</option><option value="0.5">0.50</option><option value="0.25">0.25</option></select></div></div>
+
+      <div class="score-summary">
+        <div>Tổng điểm: <span class="total-point" id="ui-tong-diem">20.00</span> / 20.00</div>
+        <div>Xếp loại: <span class="rating-badge" id="ui-xep-loai">Giỏi</span></div>
+      </div>
+    </div>
+
+    <!-- 4. PHẦN III: NHẬN XÉT -->
+    <div class="card">
+      <div class="card-title">✍️ III. Nhận Xét Đánh Giá</div>
+      <div class="form-group">
+        <label>Thành công của giờ dạy</label>
+        <textarea id="nhanxet-tot" placeholder="- Kế hoạch bài dạy chuẩn bị chu đáo...&#10;- Học sinh tích cực tương tác..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Hạn chế cần lưu ý</label>
+        <textarea id="nhanxet-hanche" placeholder="- Cần điều phối thời gian thảo luận nhóm hợp lý hơn..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn-submit" onclick="xuatBanInPDF()">📄 Xuất File PDF</button>
+  </div>
+
+  <!-- ==================== KHUNG IN CHUẨN A4 CÔNG VĂN 5512 ==================== -->
+  <div id="print-layout">
+    <table class="p-header-table">
+      <tr>
+        <td style="width: 45%;">
+          UBND PHƯỜNG BÌNH LỢI TRUNG<br>
+          <b>TRƯỜNG THCS NGUYỄN VĂN BÉ</b>
+        </td>
+        <td style="width: 55%;">
+          <b>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</b><br>
+          <u>Độc lập – Tự do – Hạnh phúc</u>
+        </td>
+      </tr>
+    </table>
+
+    <div class="p-title">PHIẾU GHI NHẬN, ĐÁNH GIÁ BÀI DẠY, CHỦ ĐỀ DẠY HỌC<br><span style="font-size: 11pt;">BẬC TRUNG HỌC</span></div>
+
+    <div style="margin-bottom: 8px; line-height: 1.4;">
+      Họ và tên giáo viên dạy: <b id="pr-gv"></b><br>
+      Trường THCS Nguyễn Văn Bé &nbsp;&nbsp;-&nbsp;&nbsp; Lớp: <b id="pr-lop"></b><br>
+      Môn: <b id="pr-mon"></b> &nbsp;&nbsp;-&nbsp;&nbsp; Tên bài (chủ đề): <b id="pr-bai"></b><br>
+      Thời gian: <span id="pr-thoigian"></span><br>
+      Họ và tên người dự: <b id="pr-nguoidu"></b> &nbsp;&nbsp;-&nbsp;&nbsp; Chuyên môn: <span id="pr-chuyenmon"></span><br>
+      Đơn vị công tác: Trường THCS Nguyễn Văn Bé
+    </div>
+
+    <div class="p-section-title">I. PHẦN GHI NHẬN</div>
+    <table class="p-table" id="pr-table-ghinhan">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Hoạt động Thầy và Trò</th>
+          <th style="width: 35%;">Nội dung</th>
+          <th style="width: 35%;">Nhận xét</th>
+        </tr>
+      </thead>
+      <tbody id="pr-tbody-ghinhan"></tbody>
+    </table>
+
+    <div class="avoid-break">
+      <div class="p-section-title">II. PHẦN CHO ĐIỂM</div>
+      <table class="p-table">
+        <thead>
+          <tr>
+            <th>Nội dung</th>
+            <th>TC</th>
+            <th>Tiêu chí</th>
+            <th>Tối đa</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody id="pr-tbody-diem"></tbody>
+      </table>
+
+      <div style="font-weight: bold; margin: 4px 0 8px 0;">
+        Xếp loại bài dạy: <span id="pr-xeploai" style="text-transform: uppercase;"></span> 
+        (Tổng điểm: <span id="pr-tongdiem"></span>/20,00)
+      </div>
+    </div>
+
+    <div class="avoid-break">
+      <div class="p-section-title">III. NHẬN XÉT, ĐÁNH GIÁ</div>
+      <div style="font-weight: bold; margin-top: 4px;">1. Người dự giờ nhận xét:</div>
+      <div style="margin-left: 10px;">
+        a) Những thành công của giờ dạy:<br>
+        <div id="pr-nx-tot" style="white-space: pre-wrap; margin-bottom: 6px; font-style: italic;"></div>
+        b) Những hạn chế của tiết học cần lưu ý:<br>
+        <div id="pr-nx-hanche" style="white-space: pre-wrap; font-style: italic;"></div>
+      </div>
+
+      <table class="p-sign-table">
+        <tr>
+          <td>
+            <b>Người được đánh giá</b><br>
+            <i>(Ký và ghi rõ họ tên)</i>
+          </td>
+          <td>
+            <i>Bình Thạnh, ngày .... tháng .... năm 202...</i><br>
+            <b>Người đánh giá</b><br>
+            <i>(Ký và ghi rõ họ tên)</i>
+            <div style="margin-top: 45px; font-weight: bold;" id="pr-sign-name"></div>
+          </td>
+        </tr>
+      </table>
+      <div style="font-size: 8pt; font-style: italic; margin-top: 15px; border-top: 1px solid #ccc; padding-top: 3px;">
+        CV 5512 /BGDĐT-GDTrH hướng dẫn xây dựng và tổ chức thực hiện KHGD của trường theo TT 32
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Khởi tạo ngày mặc định
+    document.getElementById('ngay-day').valueAsDate = new Date();
+
+    // 1. Quản lý hoạt động động (Add / Remove)
+    let hoatDongCount = 0;
+    function themHoatDong(ten = "", nd = "", nx = "") {
+      hoatDongCount++;
+      const id = hoatDongCount;
+      const tpl = `
+        <div class="activity-card" id="act-${id}">
+          <button class="btn-del-act" onclick="document.getElementById('act-${id}').remove()">Xóa</button>
+          <div class="form-group">
+            <label>Hoạt động Thầy và Trò</label>
+            <input type="text" class="act-name" placeholder="VD: Khởi động / Thảo luận nhóm..." value="${ten}">
+          </div>
+          <div class="form-group">
+            <label>Nội dung</label>
+            <textarea class="act-content" placeholder="Ghi nhận diễn biến nội dung bài dạy...">${nd}</textarea>
+          </div>
+          <div class="form-group">
+            <label>Nhận xét</label>
+            <textarea class="act-comment" placeholder="Nhận xét ưu/khuyết...">${nx}</textarea>
+          </div>
+          <label class="btn-camera">
+            📸 Chụp / Đính ảnh minh chứng
+            <input type="file" accept="image/*" capture="environment" style="display:none" onchange="xuLyAnh(event, 'preview-${id}')">
+          </label>
+          <div class="photo-preview" id="preview-${id}"></div>
+        </div>
+      `;
+      document.getElementById('activity-list').insertAdjacentHTML('beforeend', tpl);
+    }
+
+    // Thêm sẵn 3 khung mẫu lúc mới mở
+    themHoatDong("Hoạt động 1: Khởi động");
+    themHoatDong("Hoạt động 2: Hình thành kiến thức mới");
+    themHoatDong("Hoạt động 3: Luyện tập - Vận dụng");
+
+    // 2. Nén ảnh tự động trên RAM iPhone
+    function xuLyAnh(event, boxId) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const cvs = document.createElement('canvas');
+          const maxW = 1000;
+          let w = img.width, h = img.height;
+          if (w > maxW) { h = (maxW / w) * h; w = maxW; }
+          cvs.width = w; cvs.height = h;
+          cvs.getContext('2d').drawImage(img, 0, 0, w, h);
+
+          const dataUrl = cvs.toDataURL('image/jpeg', 0.7);
+          const box = document.getElementById(boxId);
+          const wrap = document.createElement('div');
+          wrap.className = 'thumb-wrap';
+          wrap.innerHTML = `<img src="${dataUrl}"><button class="thumb-del" onclick="this.parentElement.remove()">✕</button>`;
+          box.appendChild(wrap);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = "";
+    }
+
+    // 3. Tính điểm tự động theo CV 5512
+    function tinhTongDiem() {
+      const selects = document.querySelectorAll('.score-input');
+      let tong = 0;
+      selects.forEach(s => tong += parseFloat(s.value));
+      document.getElementById('ui-tong-diem').innerText = tong.toFixed(2);
+
+      let xepLoai = "Không đạt";
+      if (tong >= 18.0) xepLoai = "Giỏi";
+      else if (tong >= 13.5) xepLoai = "Khá";
+      else if (tong >= 10.0) xepLoai = "Trung bình";
+
+      document.getElementById('ui-xep-loai').innerText = xepLoai;
+      return { tong: tong.toFixed(2), xepLoai };
+    }
+
+    // Tiêu chuẩn 12 tiêu chí văn bản gốc CV 5512
+    const danhSachTieuChi = [
+      { nhom: "Kế hoạch bài dạy", tc: 1, text: "Mức độ phù hợp của các hoạt động học với mục tiêu, nội dung...", max: "1,00" },
+      { nhom: "Kế hoạch bài dạy", tc: 2, text: "Mức độ rõ ràng, chính xác của mục tiêu, nội dung, sản phẩm...", max: "2,00" },
+      { nhom: "Kế hoạch bài dạy", tc: 3, text: "Mức độ phù hợp của thiết bị dạy học và học liệu...", max: "1,00" },
+      { nhom: "Kế hoạch bài dạy", tc: 4, text: "Mức độ phù hợp của phương án kiểm tra, đánh giá...", max: "2,00" },
+      { nhom: "Hoạt động của giáo viên", tc: 5, text: "Mức độ chính xác, sinh động khi chuyển giao nhiệm vụ...", max: "2,00" },
+      { nhom: "Hoạt động của giáo viên", tc: 6, text: "Khả năng theo dõi, quan sát phát hiện khó khăn của HS...", max: "1,00" },
+      { nhom: "Hoạt động của giáo viên", tc: 7, text: "Biện pháp hỗ trợ, khuyến khích học sinh hợp tác...", max: "2,00" },
+      { nhom: "Hoạt động của giáo viên", tc: 8, text: "Đánh giá chính xác quá trình và kết quả học tập...", max: "2,00" },
+      { nhom: "Hoạt động của học sinh", tc: 9, text: "Khả năng tiếp nhận và sẵn sàng thực hiện nhiệm vụ...", max: "2,00" },
+      { nhom: "Hoạt động của học sinh", tc: 10, text: "Mức độ tích cực, chủ động, hợp tác của học sinh...", max: "2,00" },
+      { nhom: "Hoạt động của học sinh", tc: 11, text: "Mức độ tham gia thảo luận, trình bày sản phẩm...", max: "2,00" },
+      { nhom: "Hoạt động của học sinh", tc: 12, text: "Mức độ đúng đắn, chính xác của kết quả học tập...", max: "1,00" }
+    ];
+
+    // 4. Đổ dữ liệu và gọi in PDF trên Safari
+    function xuatBanInPDF() {
+      // Thông tin đầu
+      document.getElementById('pr-gv').innerText = document.getElementById('gv-day').value || "....................................";
+      document.getElementById('pr-lop').innerText = document.getElementById('lop').value || "..........";
+      document.getElementById('pr-mon').innerText = document.getElementById('mon').value || "...................";
+      document.getElementById('pr-bai').innerText = document.getElementById('ten-bai').value || "....................................................";
+      
+      const ngay = document.getElementById('ngay-day').value;
+      const ngayFmt = ngay ? ngay.split('-').reverse().join('/') : "..../..../202...";
+      document.getElementById('pr-thoigian').innerText = `${document.getElementById('tiet').value || "Tiết ....."} - ${document.getElementById('thu-day').value} - Ngày ${ngayFmt}`;
+      
+      const nguoiDu = document.getElementById('nguoi-du').value || "....................................";
+      document.getElementById('pr-nguoidu').innerText = nguoiDu;
+      document.getElementById('pr-sign-name').innerText = nguoiDu;
+      document.getElementById('pr-chuyenmon').innerText = document.getElementById('chuyen-mon').value || "...................";
+
+      // Phần I: Hoạt động & Ảnh
+      const tbodyI = document.getElementById('pr-tbody-ghinhan');
+      tbodyI.innerHTML = "";
+      document.querySelectorAll('.activity-card').forEach(card => {
+        const name = card.querySelector('.act-name').value;
+        const cont = card.querySelector('.act-content').value;
+        const comm = card.querySelector('.act-comment').value;
+        const imgs = card.querySelectorAll('.photo-preview img');
+
+        let imgHtml = "";
+        if (imgs.length > 0) {
+          imgHtml = `<div class="p-photo-grid">`;
+          imgs.forEach(m => { imgHtml += `<img src="${m.src}">`; });
+          imgHtml += `</div>`;
+        }
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><b>${name}</b>${imgHtml}</td>
+          <td style="white-space: pre-wrap;">${cont}</td>
+          <td style="white-space: pre-wrap;">${comm}</td>
+        `;
+        tbodyI.appendChild(row);
+      });
+
+      // Phần II: Bảng điểm
+      const tbodyII = document.getElementById('pr-tbody-diem');
+      tbodyII.innerHTML = "";
+      const selectVals = document.querySelectorAll('.score-input');
+      
+      danhSachTieuChi.forEach((item, idx) => {
+        const row = document.createElement('tr');
+        let nhomCell = "";
+        if (idx === 0) nhomCell = `<td rowspan="4" style="text-align:center; font-weight:bold; vertical-align:middle;">Kế hoạch bài dạy</td>`;
+        if (idx === 4) nhomCell = `<td rowspan="4" style="text-align:center; font-weight:bold; vertical-align:middle;">Hoạt động của giáo viên</td>`;
+        if (idx === 8) nhomCell = `<td rowspan="4" style="text-align:center; font-weight:bold; vertical-align:middle;">Hoạt động của học sinh</td>`;
+
+        const val = parseFloat(selectVals[idx].value).toFixed(2).replace('.', ',');
+        row.innerHTML = `
+          ${nhomCell}
+          <td style="text-align:center;">${item.tc}</td>
+          <td>${item.text}</td>
+          <td style="text-align:center;">${item.max}</td>
+          <td style="text-align:center; font-weight:bold;">${val}</td>
+        `;
+        tbodyII.appendChild(row);
+      });
+
+      const kq = tinhTongDiem();
+      document.getElementById('pr-tongdiem').innerText = kq.tong.replace('.', ',');
+      document.getElementById('pr-xeploai').innerText = kq.xepLoai;
+
+      // Phần III: Nhận xét
+      document.getElementById('pr-nx-tot').innerText = document.getElementById('nhanxet-tot').value || "(Không có ghi nhận)";
+      document.getElementById('pr-nx-hanche').innerText = document.getElementById('nhanxet-hanche').value || "(Không có ghi nhận)";
+
+      // Gọi lệnh in trên iPhone
+      window.print();
+    }
+  </script>
+</body>
+</html>
