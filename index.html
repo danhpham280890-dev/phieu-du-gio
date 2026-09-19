@@ -80,12 +80,11 @@
     }
 
     /* =======================================================
-       BẢN DÀN TRANG XUẤT PDF RỰC RỠ & HIỆN ĐẠI (A4)
+       BẢN DÀN TRANG XUẤT PDF DIGITAL COLOR (A4)
        ======================================================= */
     #print-layout { display: none; }
 
     @media print {
-      /* Giữ nguyên màu nền và viền màu khi xuất PDF trên Safari iOS */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -134,7 +133,7 @@
       .p-table td, .p-table th { border: 1px solid #cbd5e1; padding: 5px 7px; font-size: 9pt; vertical-align: top; }
       .p-table th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; text-align: center; }
 
-      /* Bảng tiêu chí màu mè */
+      /* Bảng tiêu chí màu */
       .p-table-score th { background-color: #1e40af; color: white; border-color: #1e3a8a; }
       .p-table-score tr:nth-child(even) { background-color: #f8fafc; }
       .p-nhom-title { background-color: #eff6ff !important; color: #1d4ed8; font-weight: bold; text-align: center; vertical-align: middle; }
@@ -353,6 +352,8 @@
           <td>
             <b>Người được đánh giá</b><br>
             <i style="font-size: 8.5pt; color: #64748b;">(Ký và ghi rõ họ tên)</i>
+            <!-- ĐỒNG BỘ TỰ ĐỘNG TÊN GIÁO VIÊN DẠY TẠI ĐÂY -->
+            <div style="margin-top: 45px; font-weight: bold; color: #1e3a8a;" id="pr-sign-gv"></div>
           </td>
           <td>
             <i>Bình Thạnh, ngày .... tháng .... năm 202...</i><br>
@@ -400,12 +401,10 @@
       document.getElementById('activity-list').insertAdjacentHTML('beforeend', tpl);
     }
 
-    // Khởi tạo sẵn 3 hoạt động
     themHoatDong("Hoạt động 1: Khởi động");
     themHoatDong("Hoạt động 2: Hình thành kiến thức mới");
     themHoatDong("Hoạt động 3: Luyện tập - Vận dụng");
 
-    // Xử lý nén ảnh nhanh trên RAM điện thoại
     function xuLyAnh(event, boxId) {
       const file = event.target.files[0];
       if (!file) return;
@@ -433,7 +432,6 @@
       event.target.value = "";
     }
 
-    // Tính điểm tự động chuẩn CV 5512
     function tinhTongDiem() {
       const selects = document.querySelectorAll('.score-input');
       let tong = 0;
@@ -464,9 +462,12 @@
       { nhom: "Hoạt động của học sinh", tc: 12, text: "Mức độ đúng đắn, chính xác của kết quả học tập...", max: "1,00" }
     ];
 
-    // Chuyển dữ liệu và kích hoạt lệnh in PDF
     function xuatBanInPDF() {
-      document.getElementById('pr-gv').innerText = document.getElementById('gv-day').value || "....................................";
+      const gvDay = document.getElementById('gv-day').value || "";
+      document.getElementById('pr-gv').innerText = gvDay || "....................................";
+      // ĐỒNG BỘ TÊN VÀO Ô CHỮ KÝ NGƯỜI ĐƯỢC ĐÁNH GIÁ
+      document.getElementById('pr-sign-gv').innerText = gvDay;
+
       document.getElementById('pr-lop').innerText = document.getElementById('lop').value || "..........";
       document.getElementById('pr-mon').innerText = document.getElementById('mon').value || "...................";
       document.getElementById('pr-bai').innerText = document.getElementById('ten-bai').value || "....................................................";
@@ -536,7 +537,6 @@
       document.getElementById('pr-nx-tot').innerText = document.getElementById('nhanxet-tot').value || "(Không có ghi nhận)";
       document.getElementById('pr-nx-hanche').innerText = document.getElementById('nhanxet-hanche').value || "(Không có ghi nhận)";
 
-      // Kích hoạt Safari in/xuất PDF
       window.print();
     }
   </script>
